@@ -42,7 +42,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.1.2. type](#h.6.1.2)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.1.3. last\_modified](#h.6.1.3)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.1.4. database-provider-specific properties](#h.6.1.4)  
-&nbsp;&nbsp;&nbsp;&nbsp;[6.2. Structure Entries](#h.6.2)  
+&nbsp;&nbsp;&nbsp;&nbsp;[6.2. Structures Entries](#h.6.2)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.1. elements](#h.6.2.1)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.2. nelements](#h.6.2.2)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.3. chemical\_formula](#h.6.2.3)  
@@ -54,7 +54,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.9. species](#h.6.2.9)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.10. assemblies](#h.6.2.10)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.11. structure\_features](#h.6.2.11)  
-&nbsp;&nbsp;&nbsp;&nbsp;[6.3. Calculation Entries](#h.6.3)  
+&nbsp;&nbsp;&nbsp;&nbsp;[6.3. Calculations Entries](#h.6.3)  
 &nbsp;&nbsp;&nbsp;&nbsp;[6.4. Reference Entries](#h.6.4)  
 &nbsp;&nbsp;&nbsp;&nbsp;[6.5. Database-Provider-Specific Entry Types](#h.6.5)  
 &nbsp;&nbsp;&nbsp;&nbsp;[6.6. Relationships Used by Multiple Entry Types](#h.6.6)  
@@ -100,7 +100,7 @@ interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
 * **Implementation**: An instance serving the OPTiMaDe API.
 * **Database**: An implementation that serves materials information.
 * **Entry**: A type of resource, over which a query can be formulated using the API
-  (e.g., structure or calculation).
+  (e.g., structures or calculations).
 * **Property**: Anything that can be in the filtering of results.
 * **Field**: A property that can be requested as partial output from the API.
 * **Resource object**: Represent resources. MUST contain at least the following top-level fields:
@@ -614,7 +614,7 @@ Example:
 {
   "data": [
     {
-      "type": "structure",
+      "type": "structures",
       "id": "example.db:structs:0001",
       "attributes": {
         "formula": "Es2 O3",
@@ -625,7 +625,7 @@ Example:
       }
     },
     {
-      "type": "structure",
+      "type": "structures",
       "id": "example.db:structs:1234",
       "attributes": {
         "formula": "Es2",
@@ -675,7 +675,7 @@ Example:
 ```jsonc
 {
   "data": {
-    "type": "structure",
+    "type": "structures",
     "id": "example.db:structs:1234",
     "attributes": {
       "formula": "Es2",
@@ -852,7 +852,7 @@ Example:
 ```jsonc
 {
   "data": {
-    "description": "a structure",
+    "description": "a structures",
     "properties": {
       "nelements": {
         "description": "Number of elements"
@@ -1365,8 +1365,9 @@ This section defines standard entry types and their properties.
 ### <a name="h.6.1.2">6.1.2. type</a>
 
 * **Description**: the type of an entry.
+  All entry MUST be able to be fetched using the [base URL](#h.3.1) type and ID at the url `<base URL>/<type>/<id>`.
 * **Requirements/Conventions**: MUST be an existing entry type.
-* **Example**: `"structure"`
+* **Example**: `"structures"`
 
 ### <a name="h.6.1.3">6.1.3. last\_modified</a>
 
@@ -1388,9 +1389,9 @@ This section defines standard entry types and their properties.
   * \_exmpl\_trajectory
   * \_exmpl\_workflow\_id
 
-## <a name="h.6.2">6.2. Structure Entries</a>
+## <a name="h.6.2">6.2. Structures Entries</a>
 
-`"structure"` entries (or objects) have the properties described above in section
+`"structures"` entries (or objects) have the properties described above in section
 [6.1. Properties Used by Multiple Entry Types](#h.6.1), as well as the following properties:
 
 ### <a name="h.6.2.1">6.2.1. elements</a>
@@ -1709,9 +1710,9 @@ by multiple chemical elements.
   ["assemblies", "unknown_positions"]
   ```
 
-## <a name="h.6.3">6.3. Calculation Entries</a>
+## <a name="h.6.3">6.3. Calculations Entries</a>
 
-`"calculation"` entries have the properties described above in section
+`"calculations"` entries have the properties described above in section
 [6.1. Properties Used by Multiple Entry Types](#h.6.1).
 
 ## <a name="h.6.4">6.4. Reference Entries</a>
@@ -1784,7 +1785,7 @@ Example:
 ```jsonc
 {
   "data": {
-    "type": "structure",
+    "type": "structures",
     "id": "example.db:structs:1234",
     "attributes": {
       "formula": "Es2",
