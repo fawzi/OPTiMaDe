@@ -852,7 +852,7 @@ Example:
 ```jsonc
 {
   "data": {
-    "description": "a structures",
+    "description": "a structures entry",
     "properties": {
       "nelements": {
         "description": "Number of elements"
