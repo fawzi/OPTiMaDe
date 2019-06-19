@@ -14,6 +14,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.3.4. Unset optional properties](#h.3.3.4)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.3.5. Warnings](#h.3.3.5)  
 &nbsp;&nbsp;&nbsp;&nbsp;[3.4. Index Meta-Database](#h.3.4)  
+&nbsp;&nbsp;&nbsp;&nbsp;[3.5. Queryable Properties](#h.3.5)  
 
 [4. API endpoints](#h.4)  
 &nbsp;&nbsp;&nbsp;&nbsp;[4.1. Entry Listing Endpoints](#h.4.1)  
@@ -45,17 +46,21 @@
 &nbsp;&nbsp;&nbsp;&nbsp;[6.2. Structures Entries](#h.6.2)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.1. elements](#h.6.2.1)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.2. nelements](#h.6.2.2)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.3. chemical\_formula](#h.6.2.3)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.4. formula\_prototype](#h.6.2.4)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.5. dimension\_types](#h.6.2.5)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.6. lattice\_vectors](#h.6.2.6)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.7. cartesian\_site\_positions](#h.6.2.7)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.8. species\_at\_sites](#h.6.2.8)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.9. species](#h.6.2.9)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.10. assemblies](#h.6.2.10)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.11. structure\_features](#h.6.2.11)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.3. elements\_ratios](#h.6.2.3)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.4. chemical\_formula\_descriptive](#h.6.2.4)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.5. chemical\_formula\_reduced](#h.6.2.5)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.6. chemical\_formula\_hill](#h.6.2.6)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.7. chemical\_formula\_anonymous](#h.6.2.7)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.8. dimension\_types](#h.6.2.8)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.9. lattice\_vectors](#h.6.2.9)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.10. cartesian\_site\_positions](#h.6.2.10)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.11. nsites](#h.6.2.11)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.12. species\_at\_sites](#h.6.2.12)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.13. species](#h.6.2.13)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.14. assemblies](#h.6.2.14)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.15. structures\_features](#h.6.2.15)  
 &nbsp;&nbsp;&nbsp;&nbsp;[6.3. Calculations Entries](#h.6.3)  
-&nbsp;&nbsp;&nbsp;&nbsp;[6.4. References Entries](#h.6.4)  
+&nbsp;&nbsp;&nbsp;&nbsp;[6.4. References Entries](#h.6.4)
 &nbsp;&nbsp;&nbsp;&nbsp;[6.5. Database-Provider-Specific Entry Types](#h.6.5)  
 &nbsp;&nbsp;&nbsp;&nbsp;[6.6. Relationships Used by Multiple Entry Types](#h.6.6)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.6.1. references](#h.6.6.1)  
@@ -101,9 +106,16 @@ interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
 * **Database**: An implementation that serves materials information.
 * **Entry**: A type of resource, over which a query can be formulated using the API
   (e.g., structures or calculations).
-* **Property**: Anything that can be in the filtering of results.
-* **Field**: A property that can be requested as partial output from the API.
-* **Resource object**: Represent resources. MUST contain at least the following top-level fields:
+* **Field**: A key of an associative-array-type data structure.
+  A field MUST be a string, exclusively containing lowercase alphanumerics (`[a-z0-9]`) and underscores (`"_"`).
+* **Property**: A field-value pair.
+* **Property value types**:
+  * **string**, **integer**, **float**, **boolean**, **null value**: Base data
+    types as defined in more detail in section [5.1. Lexical Tokens](#h.5.1).
+  * **list**, **dictionary**: Collections of base types, defined in the same manner as a JSON [array](https://json-schema.org/understanding-json-schema/reference/array.html) and [object](https://json-schema.org/understanding-json-schema/reference/object.html), respectively.
+* **Queryable property**: A property that can be in the filtering of results.
+  For more information see section [3.5. Queryable Properties](#h.3.5).
+* **Resource object**: Represents resources. MUST contain at least the following top-level fields:
   `id`, `type`.
 * **ID**: A unique identifier referencing a specific resource in the database.
   Together with **Entry**, the ID MUST uniquely identify the **Resource object**.
@@ -114,13 +126,6 @@ interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
   database that MUST be immutable.
 * **Reserved words**: The list of reserved words in this standard is:
   `info`.
-* **Property Types**:
-  * **string**, **integer**, **float**, **boolean**, **null value**: Base data
-    types as defined in more detail in section [5.1. Lexical Tokens](#h.5.1).
-  * **list**, **dictionary**: Collection of base types with the meaning they have in the JSON
-    data-interchange format, i.e., an ordered list of elements
-    (where each element can have a different type) or a hash table
-    (with the limitation that the hash key MUST be a string), respectively.
 
 # <a name="h.3">3. General API Requirements and Conventions</a>
 
@@ -328,32 +333,45 @@ need to be in a dictionary corresponding to the `attributes` field.
 
 The response MAY also return resources related to the primary data in the field:
 
-* **links**: a [JSON API links member](http://jsonapi.org/format/1.0/#document-links)
-  containing the JSON API links objects:
-  * **next**: is an URI that represents a suggested way to fetch the
-    next set of results if not all were returned, either directly as a string,
-    or as a link object. The field MUST be null or omitted if there is no additional
-    data, or if there is no way to fetch additional data. The link object can contain
-    the following members:
-    * **href**: a string containing the link’s URL.
-    * **meta**: a meta object containing non-standard meta-information about the link.
-
+* **links**: [JSON API links](http://jsonapi.org/format/1.0/#document-links) is MANDATORY for implementing pagination.
+(see section [4.1.1 URL Query Parameters `page_*`](#h.4.1.1)) Each field of a links object, i.e. a "link", must be either
+  
+  * `null`
+  * a string representing a URI, or
+  * a dictionary ("link object") with fields
+    * **href**: a string representing a URI
+    * **meta**: (OPTIONAL) a meta object containing non-standard meta-information about the link
+    
+  Example links objects:
+    
   * **base\_url**: a links object representing the base URL of the implementation. Example:
+	
+	```jsonc
+	{
+	  "links": {
+		"base_url": {
+		  "href": "http://example.com/optimade/v0.9/",
+		  "meta": {
+			"_exmpl_db_version": "3.2.1"
+		  }
+		}
+		// ...
+	  }
+	  // ...
+	}
+	```
 
-    ```jsonc
-    {
-      "links": {
-        "base_url": {
-          "href": "http://example.com/optimade/v0.9/",
-          "meta": {
-            "_exmpl_db_version": "3.2.1"
-          }
-        }
-        // ...
-      }
-      // ...
-    }
-    ```
+  The following fields are REQUIRED for implementing pagination:
+  
+  * **next**: represents a link to fetch the next set of results. When the current response is the last page of data,
+    this field MUST be either omitted or `null`-valued.
+   
+  The following fields are reserved for pagination.  Their values are as with `next`, in the sense that they
+  should be a "link". An implementation MAY offer these links:
+  
+  * **prev**: the previous page of data. `null` or omitted when the current response is the first page of data.
+  * **last**: the last page of data.
+  * **first**: the first page of data.
 
 * **included**: a list of
 [JSON API resource objects](http://jsonapi.org/format/1.0/#document-resource-objects)
@@ -486,6 +504,15 @@ The value for `is_index` MUST be `true`.
 > **Open Databases Integration for Materials Design** consortium can be found in [Appendix 1](#h.app1).
 > This list is also machine-readable, optimizing the automatic discoverability.
 
+## <a name="h.3.5">3.5. Queryable Properties</a>
+
+_Only_ properties of resource objects can be queried.
+It is understood that when one queries a property, one queries on the property's field.
+In other words, one can _only_ query on property fields from resource objects' properties.  
+A query is performed using `filter` (see section [5. API Filtering Format Specification](#h.5)).
+
+> **For implementers**: To get an understanding of which properties MUST be queryable and which are RECOMMENDED, please see section [6. Entry List](#h.6).
+
 # <a name="h.4">4. API Endpoints</a>
 
 The URL component that follows the base URL MUST represent one of the
@@ -530,6 +557,41 @@ Standard OPTIONAL URL query parameters standardized by the JSON API specificatio
 
 * **filter**: a filter string, in the format described below in section
   [5. API Filtering Format Specification](#h.5).
+  
+* **page_limit**: sets a numerical limit on the number of entries returned. See
+  [JSON API 1.0](https://jsonapi.org/format/1.0/#fetching-pagination). The API
+  implementation MUST return no more than the number specified. It MAY return fewer. The database MAY have a maximum
+  limit and not accept larger numbers (in which case an error code -- 403 Forbidden -- MUST be returned). The default limit value is up to
+  the API implementation to decide.
+  
+  Example: <http://example.com/optimade/v0.9/structures?page_limit=100>
+  
+* **page_{offset, page, cursor, above, below}**: A server MUST implement pagination in the case of no
+  user-specified `sort` parameter (via the ["links" response field](#h.3.3.2)). A server MAY implement pagination in
+  concert with `sort`. The following parameters, all prefixed by "page_", are RECOMMENDED for use with pagination.
+  If an implementation chooses
+  
+  * _offset-based pagination_: using `page_offset` and `page_limit` is RECOMMENDED.
+  * _cursor-based pagination_: using `page_cursor` and `page_limit` is RECOMMENDED.
+  * _page-based pagination_: using `page_number` and `page_limit` is RECOMMENDED (`page_limit` is equivalent to page "size").
+  * _value-based pagination_: using `page_above`/`page_below` and `page_limit` is RECOMMENDED.
+  
+  Examples (all OPTIONAL behavior a server MAY implement):
+  * skip 50 structures and fetch up to 100: `/structures?page_offset=50&page_limit=100`
+  * fetch page 2 of up to 50 structures per page: `/structures?page_number=2&page_limit=50`
+  * fetch up to 100 structures above sort-field value `4000` (in this example, server chooses to fetch results sorted
+    by increasing `id`, so `page_above` value refers to an `id` value): `/structures?page_above=4000&page_limit=100`
+
+* **sort**: If supporting sortable queries, an implementation MUST use the `sort` query parameter with format as
+  specified by [JSON API 1.0](https://jsonapi.org/format/1.0/#fetching-sorting).
+  
+  An implementation MAY support multiple sort fields for a single query. If it does, it
+  again MUST conform to the JSON API 1.0 spec.
+  
+  If an implementation supports sorting for an [entry listing endpoint](#h.4.4.2), then the `/<entries>/info` endpoint
+  MUST include, for each field name `<fieldname>` in its "data.properties.`<fieldname>`" response value,
+  the key "sortable" with value `true`. This is in addition to each property description (and optional unit).
+  An example is shown in section [4.4.2 Entry Listing Info Endpoints](#h.4.4.2).
 
 Standard OPTIONAL URL query parameters not in the JSON API specification:
 
@@ -540,12 +602,6 @@ Standard OPTIONAL URL query parameters not in the JSON API specification:
 * **email\_address**: specifies an email address of the user making the request. The
   email SHOULD be that of a person and not an automatic system.  
   Example: <http://example.com/optimade/v0.9/structures?email_address=user@example.com>
-* **response\_limit**: sets a numerical limit on the number of entries returned. The API
-  implementation MUST return no more than the number specified. It MAY return
-  less. The database MAY have a maximum limit and not accept larger numbers (in
-  which case an error code MUST be returned). The default limit value is up
-  to the API implementation to decide.  
-  Example: <http://example.com/optimade/v0.9/structures?response_limit=100>
 * **response\_fields**: specify a comma-delimited set of fields to be provided in the
   output. If provided, only these fields MUST be returned and no others.  
   Example: <http://example.com/optimade/v0.9/structures?response_fields=id,url>
@@ -617,7 +673,7 @@ Example:
       "type": "structures",
       "id": "example.db:structs:0001",
       "attributes": {
-        "formula": "Es2 O3",
+        "chemical_formula_descriptive": "Es2 O3",
         "local_id": "example.db:structs:0001",
         "url": "http://example.db/structs/0001",
         "immutable_id": "http://example.db/structs/0001@123",
@@ -628,7 +684,7 @@ Example:
       "type": "structures",
       "id": "example.db:structs:1234",
       "attributes": {
-        "formula": "Es2",
+        "chemical_formula_descriptive": "Es2",
         "local_id": "example.db:structs:1234",
         "url": "http://example.db/structs/1234",
         "immutable_id": "http://example.db/structs/1234@123",
@@ -678,7 +734,7 @@ Example:
     "type": "structures",
     "id": "example.db:structs:1234",
     "attributes": {
-      "formula": "Es2",
+      "chemical_formula_descriptive": "Es2",
       "local_id": "example.db:structs:1234",
       "url": "http://example.db/structs/1234",
       "immutable_id": "http://example.db/structs/1234@123",
@@ -855,7 +911,8 @@ Example:
     "description": "a structures entry",
     "properties": {
       "nelements": {
-        "description": "Number of elements"
+        "description": "Number of elements",
+        "sortable": true
       },
       "lattice_vectors": {
         "description": "Unit cell lattice vectors",
@@ -996,7 +1053,7 @@ A link to the main repository may be found at the [OPTiMaDe homepage](http://www
 ### <a name="h.4.4.4">4.4.4. Index Meta-Database Links Endpoint</a>
 
 If the provider implements an "Index meta-database" (see section [3.4 Index Meta-Database](#h.3.4)),
-it is RECOMMENDED to adopt a structure, where the index meta-database is the "parent" implementation
+it is RECOMMENDED to adopt a , where the index meta-database is the "parent" implementation
 of the provider's other OPTiMaDe databases.
 
 This will make all OPTiMaDe databases and implementations by the provider discoverable as `"child"`
@@ -1169,7 +1226,7 @@ entries for which the comparison is false.
 
 Examples:
 
-* `NOT ( chemical_formula = "Al" AND prototype_formula = "A" OR prototype_formula = "H2O" AND NOT chemical_formula = "Ti" )`
+* `NOT ( chemical_formula_hill = "Al" AND chemical_formula_anonymous = "A" OR chemical_formula_anonymous = "H2O" AND NOT chemical_formula_hill = "Ti" )`
 
 ### Numeric and String comparisons
 
@@ -1192,7 +1249,7 @@ constant <operator> constant
 Examples:
 
 * `nelements > 3`
-* `chemical_formula = "H2O" AND prototype_formula != "AB"`
+* `chemical_formula_hill = "H2O" AND chemical_formula_anonymous != "AB"`
 * `_exmpl_aax <= +.1e8 OR nelements >= 10 AND NOT ( _exmpl_x != "Some string" OR NOT _exmpl_a = 7)`
 * `_exmpl_spacegroup="P2"`
 * `_exmpl_cell_volume<100.0`
@@ -1219,22 +1276,22 @@ OPTIONAL features:
 
 Examples:
 
-* `prototype_formula CONTAINS "C2" AND prototype_formula STARTS WITH "A2"` 
-* `prototype_formula STARTS "B2" AND prototype_formula ENDS WITH "D2"`
+* `chemical_formula_anonymous CONTAINS "C2" AND chemical_formula_anonymous STARTS WITH "A2"` 
+* `chemical_formula_anonymous STARTS "B2" AND chemical_formula_anonymous ENDS WITH "D2"`
 
-### Comparisons of multi-valued properties
+### Comparisons of list properties
 
-Multi-valued properties can be thought of as lists or sets of strings or numbers. 
+List properties can be thought of as lists or sets of strings or numbers. 
 In the following, a set of `values` is one or more strings or numbers separated by a comma (",").
 An implementation MAY also support identifiers in the value set.
 
 The following constructs MUST be supported:
 
-* `identifier HAS value`: matches if the given value is present in the multi-valued property (i.e., set operator IN).
-* `identifier HAS ALL values`: matches when all the values given are present in the multi-valued property (i.e., set operator >=).
+* `identifier HAS value`: matches if the given value is present in the list property (i.e., set operator IN).
+* `identifier HAS ALL values`: matches when all the values given are present in the list property (i.e., set operator >=).
 * `identifier HAS, EXACTLY values`: matches when the property contains all the values given and none other (i.e., set operator =).
 * `identifier HAS ANY values`: matches when any one of the values given are present in the property (i.e., equivalent with a number of HAS separated by OR).
-* `LENGTH identifier <operator> value`: applies the numeric comparison operator for the number of items in the multi-valued property. 
+* `LENGTH identifier <operator> value`: applies the numeric comparison operator for the number of items in the list property. 
 
 The following construct MAY be supported:
 
@@ -1249,8 +1306,8 @@ inverse`.
 
 Furthermore, there is a set of OPTIONAL constructs that allows
 searches to be formulated over the values in correlated positions in
-multiple multi-valued properties. This type of filter may be useful if
-one, e.g., has one multi-valued property of elements and another of an
+multiple list properties. This type of filter may be useful if
+one, e.g., has one list property of elements and another of an
 element count.
 
 * `id1:id2:... HAS val1:val2:...`
@@ -1289,7 +1346,7 @@ Which matches when the property is set, and unset, respectively.
 
 Examples:
 
-* `chemical_formula IS KNOWN AND NOT prototype_formula IS UNKNOWN`
+* `chemical_formula_hill IS KNOWN AND NOT chemical_formula_anonymous IS UNKNOWN`
 
 ### Precedence
 
@@ -1335,7 +1392,7 @@ treat such comparisons as always non-matching.
 * If a comparison is provided between only numerical constants of
 incompatible types, e.g., `5 < "13"`, the implementation MUST respond
 with an error. The same applies for comparisons of two properties, e.g.
-`nelements > chemical_formula`.
+`nelements > chemical_formula_hill`.
 
 ### Optional filter features
 
@@ -1396,48 +1453,143 @@ This section defines standard entry types and their properties.
 
 ### <a name="h.6.2.1">6.2.1. elements</a>
 
-* **Description**: Names of elements found in the structure. 
-* **Requirements/Conventions**: String of chemical symbols of elements as strings as a multi-valued property.
+* **Description**: Names of the different elements present in the structures entry. 
+* **Requirements/Conventions**: 
+    * The chemical symbols of elements as a list of strings.
+    * The order MUST be alphabetical.
+    * This property is REQUIRED
 * **Examples**:
-  * `["Si"]`
-  * `["Si","Al","O"]`
-* **Querying**: e.g., all records pertaining to
-  materials containing Si, Al **and** O, and possibly other elements can be
-	obtained using the filter `elements HAS Si, Al, O`. To specify exactly
-	these three elements, use `elements HAS EXACTLY Si, Al, O` or alternatively
-	add `LENGTH elements = 3`.
+    * `["Si"]`
+    * `["Al","O","Si"]`
+* **Querying**: 
+    * A filter that matches all records of structures that contain Si, Al **and** O, 
+      and possibly other elements: `elements HAS ALL "Si", "Al", "O"`. 
+    * To match exactly these three elements, use `elements HAS EXACTLY "Si", "Al", "O"` or alternatively
+      add `AND LENGTH elements = 3`.
 
 ### <a name="h.6.2.2">6.2.2. nelements</a>
 
-* **Description**: Number of elements found in a structure.
-* **Requirements/Conventions**: Integer value.
+* **Description**: Number of different elements in the structures entry as an integer.
+* **Requirements/Conventions**: 
+    * This property is REQUIRED
 * **Example**: `3`
-* **Querying**: queries on this property can equivalently be formulated using `LENGTH elements`.
-  Examples:
-  * return only entities that have exactly 4 elements: `"nelements=4"`
-  * query for structures that have between 2 and 7 elements: `"nelements>=2+AND+nelements<=7"`
+* **Querying**: 
+    * Note: queries on this property can equivalently be formulated using `LENGTH elements`.
+    * A filter that matches structures that have exactly 4 elements: `nelements=4`.
+    * A filter that matches structures that have between 2 and 7 elements: `nelements>=2 AND nelements<=7`.
 
-### <a name="h.6.2.3">6.2.3. chemical\_formula</a>
+### <a name="h.6.2.3">6.2.3. elements\_ratios</a>
 
-* **Description**: The chemical formula for a structure.
+* **Description**: Relative proportions of different elements in the structures entry. 
+* **Requirements/Conventions**: 
+    * The proportions of elements in the structures entry as a list of floating point numbers.
+    * The sum of the numbers MUST be 1.0 (within floating point accuracy) 
+    * This property is REQUIRED
+* **Examples**:
+    * `[1.0]`
+    * `[0.3333333333333333, 0.2222222222222222, 0.4444444444444444]`
+* **Querying**: 
+    * Note: useful filters can be formulated using the set operator syntax for correlated values. However, since the values 
+      are floating point values, the use of equality comparisons is generally not recommended. 
+    * A filter that matches structures where approximately 1/3 of the atoms in the structures entry are the element Al is: 
+      `elements:elements_ratios HAS ALL "Al":>0.3333, "Al":<0.3334`.
+
+### <a name="h.6.2.4">6.2.4. chemical\_formula\_descriptive</a>
+
+* **Description**: The chemical formula for a structures entry as a string on a form chosen by the API implementation.
+* **Requirements/Conventions**: 
+    * The chemical formula is given as a string consisting of 
+      properly capitalized element symbols followed by integers or decimal numbers, 
+      balanced parentheses, square, and curly brackets `(`,`)`, `[`,`]`, `{`, `}`, commas, 
+      the `+`, `-`, `:` and `=` symbols. The parentheses are allowed to be followed by a number. 
+      Spaces are allowed anywhere except within chemical symbols. 
+      The order of elements and any groupings indicated by parentheses or brackets are chosen 
+      freely by the API implementation. 
+    * The string SHOULD be arithmetically consistent with the 
+      element ratios in the `chemical_formula_reduced` property.
+    * It is RECOMMENDED, but not mandatory, that symbols, parentheses and brackets, if used, 
+      are used with the meanings prescribed by [IUPAC's Nomenclature of Organic Chemistry](https://www.qmul.ac.uk/sbcs/iupac/bibliog/blue.html)
+    * This property is REQUIRED
+* **Examples**:
+    * `"(H2O)2 Na"`
+    * `"NaCl"`
+    * `"CaCO3"`
+    * `"CCaO3"`
+    * `"(CH3)3N+ - [CH2]2-OH = Me3N+ - CH2 - CH2OH"`
+* **Querying**:
+    * Note: the free-form nature of this property is likely to make queries on it across different databases inconsistent.
+    * A filter that matches an exactly given formula: `chemical_formula_descriptive="(H2O)2 Na"`.
+    * A filter that does a partial match: `chemical_formula_descriptive CONTAINS "H2O"`.
+
+### <a name="h.6.2.5">6.2.5. chemical\_formula\_reduced</a>
+
+* **Description**: The reduced chemical formula for a structures entry as a string with element symbols and 
+    integer chemical proportion numbers. The proportion number MUST be omitted if it is 1.
 * **Requirements/Conventions**:
-  * The formula MUST be **reduced**.
-  * Element names MUST be with proper capitalization (e.g., `"Si"`, not `"SI"` for "silicon").
-  * The order in which elements are specified SHOULD NOT be significant (e.g., "O2Si" is equivalent
-    to "SiO2").
-  * No spaces or separators are allowed.
+    * Element names MUST have proper capitalization (e.g., `"Si"`, not `"SI"` for "silicon").
+    * Elements MUST be placed in alphabetical order, followed by their integer chemical proportion number.
+    * For structures with no partial occupation, the chemical proportion numbers are the smallest integers 
+      for which the chemical proportion is exactly correct.
+    * For structures with partial occupation, the chemical proportion numbers are integers 
+      that within reasonable approximation indicate the correct chemical proportions. The
+      precise details of how to perform the rounding is chosen by the API implementation.
+    * No spaces or separators are allowed.
+    * Support for filters using partial string matching with this property is OPTIONAL (i.e., BEGINS WITH, ENDS WITH, and CONTAINS).
+      Intricate querying on formula components are instead recommended to be formulated using set-type filter operators 
+      on the multi valued `elements` and `elements_proportions` properties. 
+    * This property is REQUIRED
+* **Examples**:
+    * `"H2NaO"`
+    * `"ClNa"`
+    * `"CCaO3"`
+* **Querying**: 
+    * A filter that matches an exactly given formula is `chemical_formula_reduced="H2NaO"`.
+   
+### <a name="h.6.2.6">6.2.6. chemical\_formula\_hill</a>
 
-### <a name="h.6.2.4">6.2.4. formula\_prototype</a>
+* **Description**: The chemical formula for a structures entry as a string on [Hill form](https://dx.doi.org/10.1021/ja02046a005) with element symbols followed by integer chemical proportion numbers. The proportion number MUST be omitted if it is 1.
+* **Requirements/Conventions**: 
+    * The overall scale factor of the chemical proportions is chosen such that the resulting values
+      are integers that indicate the most chemically relevant unit of which the system is composed. 
+      For example, if the structures entry is a repeating unit cell with four hydrogens and four oxygens that 
+      represents two hydroperoxide molecules, 
+      `chemical_formula_hill` is `H2O2` (i.e., not `HO`, nor `H4O4`).
+    * If the chemical insight needed to ascribe a Hill formula to the system is not present, the
+      property MUST be handled as unset.
+    * Element names MUST have proper capitalization (e.g., `"Si"`, not `"SI"` for "silicon").
+    * Elements MUST be placed in [Hill order](https://dx.doi.org/10.1021/ja02046a005), followed by their integer chemical proportion number.
+      Hill order means: if carbon is present, it is placed first, and if also present, hydrogen is placed second. After
+      that, all other elements are ordered alphabetically. If carbon is not present, all elements are ordered alphabetically. 
+    * If the system has sites with partial occupation and the total occupation of each element do not all sum up to integers, then the 
+      Hill formula SHOULD be handled as unset.
+    * No spaces or separators are allowed.
+    * This property is OPTIONAL, and if set, support for partial string matching 
+      with this property is OPTIONAL (i.e., BEGINS WITH, ENDS WITH, and CONTAINS) .
+* **Examples**:
+    * `"H2O2"`
+* **Querying**: 
+    * A filter that matches an exactly given formula is `chemical_formula_hill="H2O2"`.
 
-* **Description**: The formula prototype obtained by sorting elements by the occurrence number in the
-  **reduced** chemical formula and replace them with subsequent alphabet letters A, B, C, and so on.
+### <a name="h.6.2.7">6.2.7. chemical\_formula\_anonymous</a>
 
-### <a name="h.6.2.5">6.2.5. dimension\_types</a>
+* **Description**: The anonymous formula is the `chemical_formula_reduced`, but where the elements are
+    instead first ordered by their chemical proportion number, and then, in order left to right, replaced
+    by anonymous symbols A, B, C, ..., Z, Aa, Ba, ..., Za, Ab, Bb, ... and so on.
+* **Examples**:
+    * `"A2B"`
+    * `"A42B42C16D12E10F9G5"`
+* **Requirements/Conventions**: 
+    * This property is REQUIRED.
+    * Support for filters using partial string matching with this property is OPTIONAL (i.e., BEGINS WITH, ENDS WITH, and CONTAINS).
+* **Querying**: 
+    * A filter that matches an exactly given formula is `chemical_formula_anonymous="A2B"`.
+
+### <a name="h.6.2.8">6.2.8. dimension\_types</a>
 
 * **Description**: List of three integers. For each of the three directions indicated by the three
-lattice vectors (see property [6.2.6. `lattice_vectors`](#h.6.2.6)). This list indicates if the
+lattice vectors (see property [6.2.9. `lattice_vectors`](#h.6.2.9)). This list indicates if the
 direction is periodic (value `1`) or non-periodic (value `0`). Note: the elements in this list each
-refer to the direction of the corresponding entry in [6.2.6. `lattice_vectors`](#h.6.2.6) and *not*
+refer to the direction of the corresponding entry in [6.2.9. `lattice_vectors`](#h.6.2.9) and *not*
 the Cartesian x, y, z directions.
 * **Requirements/Conventions**:
   * This property is REQUIRED.
@@ -1450,11 +1602,11 @@ the Cartesian x, y, z directions.
     lattice vectors: `[1, 0, 1]`
   * For a bulk 3D system: `[1, 1, 1]`
 
-### <a name="h.6.2.6">6.2.6. lattice\_vectors</a>
+### <a name="h.6.2.9">6.2.9. lattice\_vectors</a>
 
 * **Description**: The three lattice vectors in Cartesian coordinates, in ångström (Å).
 * **Requirements/Conventions**:
-  * This property is REQUIRED, except when [6.2.5. `dimension_types`](#h.6.2.5) is equal to
+  * This property is REQUIRED, except when [6.2.8. `dimension_types`](#h.6.2.8) is equal to
   `[0, 0, 0]` (in this case it is OPTIONAL).
   * It MUST be a list of three vectors *a*, *b*, and *c*, where each of the vectors MUST BE a list of
   the vector's coordinates along the x, y, and z Cartesian coordinates. (Therefore, the first index
@@ -1464,7 +1616,7 @@ the Cartesian x, y, z directions.
   angles between vectors), the first lattice vector SHOULD be set along `x` and the second on the `xy`
   plane.
   * This property MUST be an array of dimensions 3 times 3 regardless of the elements of
-  [6.2.5. `dimension_types`](#h.6.2.5). The vectors SHOULD by convention be chosen so the determinant
+  [6.2.8. `dimension_types`](#h.6.2.8). The vectors SHOULD by convention be chosen so the determinant
   of the `lattice_vectors` matrix is different from zero. The vectors in the non-periodic directions
   have no significance beyond fulfilling these requirements.
 * **Examples**:
@@ -1472,38 +1624,40 @@ the Cartesian x, y, z directions.
   `(4, 0, 0)`, i.e., a vector aligned along the `x` axis of length 4 Å; the second vector is
   `(0, 4, 0)`; and the third vector is `(0, 1, 4)`.
 
-### <a name="h.6.2.7">6.2.7. cartesian\_site\_positions</a>
+### <a name="h.6.2.10">6.2.10. cartesian\_site\_positions</a>
 
 * **Description**: Cartesian positions of each site. A site is an atom, a site potentially occupied by
 an atom, or a placeholder for a virtual mixture of atoms (e.g., in a virtual crystal approximation).
 * **Requirements/Conventions**:
   * This property is REQUIRED.
-  * It MUST be a list of length N times 3, where N is the number of sites in the structure.
+  * It MUST be a list of length N times 3, where N is the number of sites in the .
   * An entry MAY have multiple sites at the same Cartesian position (for a relevant use of this, see
-    e.g., the [6.2.10.`assemblies`](#h.6.2.10) property).
-  * If a component of the position is unknown, the `null` value should be provided instead. 
-    Otherwise, it should be a float value, expressed in angstrom. Note that if at least one
-    of the coordinates is unknown, the correct flag MUST be set
-    in the list `structure_features` (see section [6.2.11 `structure_features`](#h.6.2.11)).
-* **Notes**: (for implementers) While this is unrelated to this OPTiMaDe specification:
-  if you decide to store internally the `cartesian_site_positions` as a float array,
-  you might want to replace `null` values with `NaN` values, the latter being valid float numbers
-  in the IEEE 754 standard in [IEEE 754-1985](https://doi.org/10.1109/IEEESTD.1985.82928) and in the updated
-  version [IEEE 754-2008](https://doi.org/10.1109/IEEESTD.2008.4610935).
+  e.g., the [6.2.14. `assemblies`](#h.6.2.14) property).
 * **Examples**:
-  * `[[0,0,0],[0,0,2]]` indicates a structure with two sites, one sitting at the origin and one along
+  * `[[0,0,0],[0,0,2]]` indicates a  with two sites, one sitting at the origin and one along
   the (positive) `z` axis, 2 Å away from the origin.
 
-### <a name="h.6.2.8">6.2.8. species\_at\_sites</a>
+### <a name="h.6.2.11">6.2.11. nsites</a>
+
+* **Description**: The number of sites
+* **Requirements/Conventions**: An integer specifying the length of the `cartesian_site_positions` property.
+  * This property is REQUIRED.
+  * Queries on this property can equivalently be formulated using `LENGTH cartesian_site_positions`.
+* **Querying**: 
+  Examples:
+  * match only structures with exactly 4 sites: `nsites=4`
+  * match structures that have between 2 and 7 sites: `nsites>=2 AND nsites<=7`
+
+### <a name="h.6.2.12">6.2.12. species\_at\_sites</a>
 
 * **Description**: Name of the species at each site (where values for sites are specified with the
-same order of the [6.2.7. `cartesian_site_positions`](#h.6.2.7) property). The properties of the
-species are found in the [6.2.9. `species`](#h.6.2.9) property.
+same order of the [6.2.10. `cartesian_site_positions`](#h.6.2.10) property). The properties of the
+species are found in the [6.2.13. `species`](#h.6.2.13) property.
 * **Requirements/Conventions**:
   * This property is REQUIRED.
-  * It MUST be a list of strings, which MUST have length equal to the number of sites in the structure
-    (first dimension of the [6.2.7. `cartesian_site_positions`](#h.6.2.7) list).
-  * Each string MUST be a valid key of the dictionary specified by the [6.2.9. `species`](#h.6.2.9)
+  * It MUST be a list of strings, which MUST have length equal to the number of sites in the 
+    (first dimension of the [6.2.10. `cartesian_site_positions`](#h.6.2.10) list).
+  * Each string MUST be a valid key of the dictionary specified by the [6.2.13. `species`](#h.6.2.13)
     property. The requirements on this string are the same as for property names, i.e., it can be of any
     length, may use upper and lower case letters, underscore, and digits 0-9, but MUST NOT begin with a
     digit.
@@ -1516,9 +1670,9 @@ species are found in the [6.2.9. `species`](#h.6.2.9) property.
   * `["Ti","O2"]` indicates that the first site is hosting a species labeled `"Ti"` and the second a
   species labeled `"O2"`.
 
-### <a name="h.6.2.9">6.2.9. species</a>
+### <a name="h.6.2.13">6.2.13. species</a>
 
-* **Description**: Dictionary describing the species of the sites of this structure. Species can be
+* **Description**: Dictionary describing the species of the sites of this . Species can be
 pure chemical elements, or virtual-crystal atoms representing a statistical occupation of a given site
 by multiple chemical elements.
 * **Requirements/Conventions**:
@@ -1533,7 +1687,7 @@ by multiple chemical elements.
         a vacancy (the respective probability is indicated in the `concentration` list, see below).
       * If any one entry in the `species` list has a `chemical_symbols` list that 
         is longer than 1 element, the correct flag MUST be set
-        in the list `structure_features` (see section [6.2.11 `structure_features`](#h.6.2.11)).
+        in the list `structure_features` (see section [6.2.15. `structure_features`](#h.6.2.15)).
   
 
     * **concentration**: REQUIRED; MUST be a list of floats, with same length as `chemical_symbols`.
@@ -1555,7 +1709,7 @@ by multiple chemical elements.
     Note: With regards to "source database", we refer to the immediate source being queried via the
     OPTiMaDe API implementation. The main use of this field is for source databases that use species
     names, containing characters that are not allowed (see description of the
-    [6.2.8. `species_at_sites`](#h.6.2.8) list).
+    [6.2.12. `species_at_sites`](#h.6.2.12) list).
 
   * For systems that have only species formed by a single chemical symbol, and that have at most one
   species per chemical symbol, SHOULD use the chemical symbol as species name (e.g., `"Ti"` for
@@ -1564,7 +1718,7 @@ by multiple chemical elements.
   is a valid chemical symbol, that it represents a species with that chemical symbol. This means that
   a species `"C": {"chemical_symbols": ["Ti"], "concentration": [1.0]}` is valid and represents a
   titanium species (and *not* a carbon species).
-  * It is NOT RECOMMENDED that a structure includes species that do not have at least one
+  * It is NOT RECOMMENDED that a structures entry includes species that do not have at least one
   corresponding site.
 * **Examples**:
   * `"Ti": {"chemical_symbols": ["Ti"], "concentration": [1.0]}`: any site with this species is
@@ -1579,15 +1733,15 @@ by multiple chemical elements.
   * `"C13": {"chemical_symbols": ["C"], "concentration": [1.0], "mass": 13.0}`: any site with this
   species is occupied by a carbon isotope with mass 13.
 
-### <a name="h.6.2.10">6.2.10. assemblies</a>
+### <a name="h.6.2.14">6.2.14. assemblies</a>
 
 * **Description**: A description of groups of sites that are statistically correlated.
 * **Requirements/Conventions**:
   * This key is OPTIONAL (it is absent if there are no partial occupancies).
   * If present, the correct flag MUST be set
-    in the list `structure_features` (see section [6.2.11 `structure_features`](#h.6.2.11)).
+    in the list `structure_features` (see section [6.2.15. `structure_features`](#h.6.2.15)).
   * Client implementations MUST check its presence (as its presence changes the
-    interpretation of the structure).
+    interpretation of the structures entry).
   * If present, it MUST be a list of dictionaries, each of which represents an assembly and MUST have
   the following two keys:
     * **sites\_in\_groups**: Index of the sites (0-based) that belong to each group for each assembly.  
@@ -1597,7 +1751,7 @@ by multiple chemical elements.
     `sites_in_groups`. It SHOULD sum to one. See below for examples of how to specify the probability
     of the occurrence of a vacancy. The possible reasons for the values not to sum to one are the same
     as already specified above for the `concentration` of each `species`, see section
-    [6.2.9. `species`](#h.6.2.9).
+    [6.2.13. `species`](#h.6.2.13).
   * If a site is not present in any group, it means that is is present with 100 % probability (as if
   no assembly was specified).
   * A site MUST NOT appear in more than one group.
@@ -1659,7 +1813,7 @@ by multiple chemical elements.
       ```
 
   * It is up to the database provider to decide which representation to use, typically depending on
-  the internal format in which the structure is stored. However, given a structure identified by a
+  the internal format in which the structures entry is stored. However, given a structures entry identified by a
   unique ID, the API implementation MUST always provide the same representation for it.
   * The probabilities of occurrence of different assemblies are uncorrelated. So, for instance in the following case with two assemblies:
 
@@ -1687,9 +1841,9 @@ by multiple chemical elements.
     probability; the pair (0, 3) with 0.2\*0.7 = 14 % probability; the pair (1, 2) with
     0.8\*0.3 = 24 % probability; and the pair (1, 3) with 0.8\*0.7 = 56 % probability).
 
-### <a name="h.6.2.11">6.2.11. structure\_features</a>
+### <a name="h.6.2.15">6.2.15. structure\_features</a>
 * **Description**: A list of strings, flagging which special features are used by
-  the structure.
+  the structures entry.
 * **Requirements/Conventions**: 
   * This property is REQUIRED.
   * This property MUST be returned as an empty list if no special features are used.
@@ -1701,10 +1855,10 @@ by multiple chemical elements.
     `chemical_symbols` list that is longer than 1 element.
   * `unknown_positions`: This flag MUST be present if at least one component of the
     `cartesian_site_positions` list of lists has value `null`.
-  * `assemblies`: This flag MUST be present if the [`assemblies`](#h.6.2.10)
+  * `assemblies`: This flag MUST be present if the [`assemblies`](#h.6.2.14)
     list is present.  
 * **Querying**: This property MUST be queryable.
-* **Examples**: A structure having unknown positions and using assemblies:
+* **Examples**: A structures entry having unknown positions and using assemblies:
 
   ```jsonc
   ["assemblies", "unknown_positions"]
@@ -1840,7 +1994,7 @@ Example:
 
 ### <a name="h.6.6.2">6.6.2. Calculations</a>
 
-Relationships with calculations MAY be used to indicate provenance where a structure
+Relationships with calculations MAY be used to indicate provenance where a structures entry
 is either an input to or an output of calculations.
 
 > **Note**: We intend to implement in a future version of this API a
