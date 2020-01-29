@@ -58,9 +58,75 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.12. species\_at\_sites](#h.6.2.12)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.13. species](#h.6.2.13)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.14. assemblies](#h.6.2.14)  
+# OPTiMaDe API specification v0.9.8-develop
+
+[1. Introduction](#h.1)
+
+[2. Term Definition](#h.2)
+
+[3. General API Requirements and Conventions](#h.3)  
+&nbsp;&nbsp;&nbsp;&nbsp;[3.1. Base URL](#h.3.1)  
+&nbsp;&nbsp;&nbsp;&nbsp;[3.2. URL Encoding](#h.3.2)  
+&nbsp;&nbsp;&nbsp;&nbsp;[3.3. Responses](#h.3.3)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.3.1. Response Format](#h.3.3.1)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.3.2. JSON API Response Schema: Common Fields](#h.3.3.2)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.3.3. HTTP Response Status Codes](#h.3.3.3)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.3.4. Unset optional properties](#h.3.3.4)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.3.5. Warnings](#h.3.3.5)  
+&nbsp;&nbsp;&nbsp;&nbsp;[3.4. Index Meta-Database](#h.3.4)  
+&nbsp;&nbsp;&nbsp;&nbsp;[3.5. Queryable Properties](#h.3.5)  
+
+[4. API endpoints](#h.4)  
+&nbsp;&nbsp;&nbsp;&nbsp;[4.1. Entry Listing Endpoints](#h.4.1)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4.1.1. URL Query Parameters](#h.4.1.1)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4.1.2. JSON API Response Schema](#h.4.1.2)  
+&nbsp;&nbsp;&nbsp;&nbsp;[4.2. Single Entry Endpoints](#h.4.2)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4.2.1. URL Query Parameters](#h.4.2.1)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4.2.2. JSON API Response Schema](#h.4.2.2)  
+&nbsp;&nbsp;&nbsp;&nbsp;[4.3. Info Endpoints](#h.4.3)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4.3.1. Base URL Info Endpoint](#h.4.3.1)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4.3.2. Entry Listing Info Endpoints](#h.4.3.2)  
+&nbsp;&nbsp;&nbsp;&nbsp;[4.4. Links Endpoint](#h.4.4)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4.4.1. JSON API Response Schema](#h.4.4.1)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4.4.2. Parent and Child Objects](#h.4.4.2)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4.4.3. Provider Objects](#h.4.4.3)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4.4.4. Index Meta-Database Links Endpoint](#h.4.4.4)  
+&nbsp;&nbsp;&nbsp;&nbsp;[4.5. Custom Extension Endpoints](#h.4.5)  
+
+[5. API Filtering Format Specification](#h.5)  
+&nbsp;&nbsp;&nbsp;&nbsp;[5.1. Lexical Tokens](#h.5.1)  
+&nbsp;&nbsp;&nbsp;&nbsp;[5.2. The Filter Language Syntax](#h.5.2)  
+
+[6. Entry List](#h.6)  
+&nbsp;&nbsp;&nbsp;&nbsp;[6.1. Properties Used by Multiple Entry Types](#h.6.1)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.1.1. id](#h.6.1.1)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.1.2. type](#h.6.1.2)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.1.3. last\_modified](#h.6.1.3)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.1.4. database-provider-specific properties](#h.6.1.4)  
+&nbsp;&nbsp;&nbsp;&nbsp;[6.2. Structures Entries](#h.6.2)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.1. elements](#h.6.2.1)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.2. nelements](#h.6.2.2)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.3. elements\_ratios](#h.6.2.3)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.4. chemical\_formula\_descriptive](#h.6.2.4)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.5. chemical\_formula\_reduced](#h.6.2.5)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.6. chemical\_formula\_hill](#h.6.2.6)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.7. chemical\_formula\_anonymous](#h.6.2.7)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.8. dimension\_types](#h.6.2.8)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.9. lattice\_vectors](#h.6.2.9)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.10. cartesian\_site\_positions](#h.6.2.10)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.11. nsites](#h.6.2.11)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.12. species\_at\_sites](#h.6.2.12)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.13. species](#h.6.2.13)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.14. assemblies](#h.6.2.14)  
+<<<<<<< develop
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.15. structures\_features](#h.6.2.15)  
 &nbsp;&nbsp;&nbsp;&nbsp;[6.3. Calculations Entries](#h.6.3)  
 &nbsp;&nbsp;&nbsp;&nbsp;[6.4. References Entries](#h.6.4)
+=======
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2.15. structure\_features](#h.6.2.15)  
+&nbsp;&nbsp;&nbsp;&nbsp;[6.3. Calculations Entries](#h.6.3)  
+&nbsp;&nbsp;&nbsp;&nbsp;[6.4. References Entries](#h.6.4)  
+>>>>>>> fawzi/develop
 &nbsp;&nbsp;&nbsp;&nbsp;[6.5. Database-Provider-Specific Entry Types](#h.6.5)  
 &nbsp;&nbsp;&nbsp;&nbsp;[6.6. Relationships Used by Multiple Entry Types](#h.6.6)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.6.1. references](#h.6.6.1)  
@@ -105,9 +171,15 @@ interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
 * **Implementation**: An instance serving the OPTiMaDe API.
 * **Database**: An implementation that serves materials information.
 * **Entry**: A type of resource, over which a query can be formulated using the API
+<<<<<<< develop
   (e.g., structures or calculations).
+=======
+  (e.g., structures, calculations, or references).
+>>>>>>> fawzi/develop
 * **Field**: A key of an associative-array-type data structure.
   A field MUST be a string, exclusively containing lowercase alphanumerics (`[a-z0-9]`) and underscores (`"_"`).
+  A field MUST start with a lowercase letter (`[a-z]`) or an underscore (`"_"`).
+  MUST NOT match any of the entry names.
 * **Property**: A field-value pair.
 * **Property value types**:
   * **string**, **integer**, **float**, **boolean**, **null value**: Base data
@@ -908,7 +980,11 @@ Example:
 ```jsonc
 {
   "data": {
+<<<<<<< develop
     "description": "a structures entry",
+=======
+    "description": "a structures",
+>>>>>>> fawzi/develop
     "properties": {
       "nelements": {
         "description": "Number of elements",
@@ -1133,6 +1209,23 @@ The following tokens are used in the filter query component:
     * `_exmpl_trajectory`
     * `_exmpl_workflow_id`  
 
+* **Nested property names** MUST contain at least two property names joined by
+  periods (`.`). When query is performed on relationships, the entrypoint name
+  of the relationship is used as the name of the first property.
+
+  Nested property names are similar to
+  [JSONPaths](https://goessner.net/articles/JsonPath/) in a sense that they are
+  used to access nested JSON data structures. A nested property name MUST be
+  resolved starting either from `attributes` dictionary of an entry or from
+  `relationships`, depending on where the first part of the path is found.
+  When reached, every list is flattened, and the resolution continues for every
+  list member.
+
+  Examples:
+
+    * `authors.name`
+    * `references.authors.name` (`references` is an entrypoint name)
+
 * **String values** MUST be enclosed in double quotes ("", ASCII symbol 92
     dec, 0x5C hex). The quote and other special characters within the double
     quotes MUST be escaped using C/JSON/Perl/Python convention: a double quote
@@ -1289,7 +1382,7 @@ The following constructs MUST be supported:
 
 * `identifier HAS value`: matches if the given value is present in the list property (i.e., set operator IN).
 * `identifier HAS ALL values`: matches when all the values given are present in the list property (i.e., set operator >=).
-* `identifier HAS, EXACTLY values`: matches when the property contains all the values given and none other (i.e., set operator =).
+* `identifier HAS EXACTLY values`: matches when the property contains all the values given and none other (i.e., set operator =).
 * `identifier HAS ANY values`: matches when any one of the values given are present in the property (i.e., equivalent with a number of HAS separated by OR).
 * `LENGTH identifier <operator> value`: applies the numeric comparison operator for the number of items in the list property. 
 
@@ -1312,7 +1405,7 @@ element count.
 
 * `id1:id2:... HAS val1:val2:...`
 * `id1:id2:... HAS ALL val1:val2:...`
-* `id1:id2:... HAS, EXACTLY val1:val2:...`
+* `id1:id2:... HAS EXACTLY val1:val2:...`
 * `id1:id2:... HAS ANY val1:val2:...`
 * `id1:id2:... HAS ONLY val1:val2:...`
 
@@ -1422,7 +1515,11 @@ This section defines standard entry types and their properties.
 ### <a name="h.6.1.2">6.1.2. type</a>
 
 * **Description**: the type of an entry.
+<<<<<<< develop
   All entry MUST be able to be fetched using the [base URL](#h.3.1) type and ID at the url `<base URL>/<type>/<id>`.
+=======
+  Any entry MUST be able to be fetched using the [base URL](#h.3.1) type and ID at the url `<base URL>/<type>/<id>`.
+>>>>>>> fawzi/develop
 * **Requirements/Conventions**: MUST be an existing entry type.
 * **Example**: `"structures"`
 
@@ -1657,10 +1754,11 @@ species are found in the [6.2.13. `species`](#h.6.2.13) property.
   * This property is REQUIRED.
   * It MUST be a list of strings, which MUST have length equal to the number of sites in the 
     (first dimension of the [6.2.10. `cartesian_site_positions`](#h.6.2.10) list).
-  * Each string MUST be a valid key of the dictionary specified by the [6.2.13. `species`](#h.6.2.13)
-    property. The requirements on this string are the same as for property names, i.e., it can be of any
-    length, may use upper and lower case letters, underscore, and digits 0-9, but MUST NOT begin with a
-    digit.
+  * Each species MUST have a unique name.
+  * Each species name mentioned in the `species_at_sites` list MUST be
+    described in the [6.2.13. `species`](#h.6.2.13) list (i.e. for each value in the `species_at_sites` list
+    there MUST exist exactly one dictionary in the `species` list with the `name`
+    attribute equal to the corresponging `species_at_sites` value);
   * Each site MUST be associated only to a single species.  
     **Note**: However, species can represent mixtures of atoms, and multiple species MAY be defined
     for the same chemical element. This latter case is useful when different atoms of the same type
@@ -1672,13 +1770,21 @@ species are found in the [6.2.13. `species`](#h.6.2.13) property.
 
 ### <a name="h.6.2.13">6.2.13. species</a>
 
+<<<<<<< develop
 * **Description**: Dictionary describing the species of the sites of this . Species can be
+=======
+* **Description**: A list describing the species of the sites of this structure. Species can be
+>>>>>>> fawzi/develop
 pure chemical elements, or virtual-crystal atoms representing a statistical occupation of a given site
 by multiple chemical elements.
 * **Requirements/Conventions**:
   * This property is REQUIRED.
-  * It MUST be a dictionary, where keys represent the species' name, and values are themselves
-  dictionaries with the following keys:
+  * It MUST be a list of dictionaries, and the each list member MUST be a
+  dictionary with the following keys:
+
+    * **name**: REQUIRED; gives the name of the species; the **name**
+        value MUST be unique in the `species` list;
+
     * **chemical\_symbols**: REQUIRED; MUST be a list of strings of all chemical elements composing this species.
       * It MUST be one of the following:
         * a valid chemical-element name, or
@@ -1688,7 +1794,6 @@ by multiple chemical elements.
       * If any one entry in the `species` list has a `chemical_symbols` list that 
         is longer than 1 element, the correct flag MUST be set
         in the list `structure_features` (see section [6.2.15. `structure_features`](#h.6.2.15)).
-  
 
     * **concentration**: REQUIRED; MUST be a list of floats, with same length as `chemical_symbols`.
     The numbers represent the relative concentration of the corresponding chemical symbol in this
@@ -1721,16 +1826,16 @@ by multiple chemical elements.
   * It is NOT RECOMMENDED that a structures entry includes species that do not have at least one
   corresponding site.
 * **Examples**:
-  * `"Ti": {"chemical_symbols": ["Ti"], "concentration": [1.0]}`: any site with this species is
+  * `"species": [ {"name": "Ti", "chemical_symbols": ["Ti"], "concentration": [1.0]} ]`: any site with this species is
   occupied by a Ti atom.
-  * `"Ti": {"chemical_symbols": ["Ti", "vacancy"], "concentration": [0.9, 0.1]}`: any site with this
+  * `"species": [ {"name": "Ti", "chemical_symbols": ["Ti", "vacancy"], "concentration": [0.9, 0.1]} ]`: any site with this
   species is occupied by a Ti atom with 90 % probability, and has a vacancy with 10 % probability.
-  * `"BaCa": {"chemical_symbols": ["vacancy", "Ba", "Ca"], "concentration": [0.05, 0.45, 0.5], "mass": 88.5}`: any site with this species is occupied by a Ba atom with 45 % probability, a Ca atom with
+  * `"species": [ {"name": "BaCa", "chemical_symbols": ["vacancy", "Ba", "Ca"], "concentration": [0.05, 0.45, 0.5], "mass": 88.5} ]`: any site with this species is occupied by a Ba atom with 45 % probability, a Ca atom with
   50 % probability, and by a vacancy with 5 % probability. The mass of this site is (on average) 88.5
   a.m.u.
-  * `"C12": {"chemical_symbols": ["C"], "concentration": [1.0], "mass": 12.0}`: any site with this
+  * `"species": [ {"name": "C12", "chemical_symbols": ["C"], "concentration": [1.0], "mass": 12.0} ]`: any site with this
   species is occupied by a carbon isotope with mass 12.
-  * `"C13": {"chemical_symbols": ["C"], "concentration": [1.0], "mass": 13.0}`: any site with this
+  * `"species": [ {"name": "C13", "chemical_symbols": ["C"], "concentration": [1.0], "mass": 13.0} ]`: any site with this
   species is occupied by a carbon isotope with mass 13.
 
 ### <a name="h.6.2.14">6.2.14. assemblies</a>
@@ -1781,12 +1886,13 @@ by multiple chemical elements.
       {
         "cartesian_site_positions": [[0,0,0]],
         "species_at_sites": ["SiGe-vac"],
-        "species": {
-          "SiGe-vac": {
-            "chemical_symbols": ["Si", "Ge", "vacancy"],
-            "concentration": [0.3, 0.5, 0.2]
-          }
-        }
+        "species": [
+            {
+              "name": "SiGe-vac",
+              "chemical_symbols": ["Si", "Ge", "vacancy"],
+              "concentration": [0.3, 0.5, 0.2]
+            }
+        ]
         // ...
       }
       ```
@@ -2043,8 +2149,8 @@ Filter = [Spaces], Expression ;
 
 Constant = String | Number ;
 
-Value = String | Number | Identifier ;
-(* Note: support for Identifier in Value is OPTIONAL *)
+Value = String | Number | Property ;
+(* Note: support for Property in Value is OPTIONAL *)
 
 ValueList = [ Operator ], Value, { Comma, [ Operator ], Value } ;
 (* Support for Operator in ValueList is OPTIONAL *)
@@ -2063,10 +2169,10 @@ ExpressionClause = ExpressionPhrase, [ AND, ExpressionClause ] ;
 ExpressionPhrase = [ NOT ], ( Comparison | PredicateComparison | OpeningBrace, Expression, ClosingBrace );
 
 Comparison = ConstantFirstComparison |
-             IdentifierFirstComparison ;
+             PropertyFirstComparison ;
 (* Note: support for ConstantFirstComparison is OPTIONAL *)
 
-IdentifierFirstComparison = Identifier, ( 
+PropertyFirstComparison = Property, ( 
                 ValueOpRhs |
                 KnownOpRhs |
                 FuzzyStringOpRhs |
@@ -2088,11 +2194,15 @@ SetOpRhs = HAS, ( [ Operator ], Value | ALL, ValueList | EXACTLY, ValueList | AN
 (* Note: support for ONLY in SetOpRhs is OPTIONAL *)
 (* Note: support for [ Operator ] in SetOpRhs is OPTIONAL *)
 
-SetZipOpRhs = IdentifierZipAddon, HAS, ( ValueZip | ONLY, ValueZipList | ALL, ValueZipList | EXACTLY, ValueZipList | ANY, ValueZipList ) ;
+SetZipOpRhs = PropertyZipAddon, HAS, ( ValueZip | ONLY, ValueZipList | ALL, ValueZipList | EXACTLY, ValueZipList | ANY, ValueZipList ) ;
 
-LengthComparison = LENGTH, Identifier, Operator, Value ;
+LengthComparison = LENGTH, Property, Operator, Value ;
 
-IdentifierZipAddon = Colon, Identifier, {Colon, Identifier} ;
+PropertyZipAddon = Colon, Property, {Colon, Property} ;
+
+(* Property *)
+
+Property = Identifier, { Dot, Identifier } ;
 
 (* TOKENS *)
 
@@ -2101,6 +2211,7 @@ IdentifierZipAddon = Colon, Identifier, {Colon, Identifier} ;
 OpeningBrace = '(', [Spaces] ;
 ClosingBrace = ')', [Spaces] ;
 
+Dot = '.', [Spaces] ;
 Comma = ',', [Spaces] ;
 Colon = ':', [Spaces] ;
 
@@ -2130,7 +2241,7 @@ ANY = 'A', 'N', 'Y', [Spaces] ;
 
 Operator = ( '<', [ '=' ] | '>', [ '=' ] | '=' | '!', '=' ), [Spaces] ;
 
-(* Identifier syntax *)
+(* Property syntax *)
 
 Identifier = LowercaseLetter, { LowercaseLetter | Digit }, [Spaces] ;
 
